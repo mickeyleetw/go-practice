@@ -1,0 +1,128 @@
+definitions:
+  models.VerifyAccountReq:
+    properties:
+      password:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  models.CreateAccountReq:
+    properties:
+      password:
+        pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-z0-9]{8,32}$"
+        type: string
+      name:
+        maxLength: 32
+        minLength: 1
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  resp.errorResp:
+    properties:
+      success:
+        type: boolean= false
+      message:
+        type: string
+    type: object
+  resp.successResp:
+    properties:
+      success:
+        type: boolean= true
+      message:
+        type: string
+    type: object
+
+info:
+  contact: {}
+  title: Senao Pretest API
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: ping
+      tags:
+      - Other
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateAccountReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/resp.successResp'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/resp.errorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/resp.errorResp'
+      summary: create account
+      tags:
+      - Account
+  /accounts/verify:
+    post:
+      consumes:
+      - application/json
+      description: verify account
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.VerifyAccountReq'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Success
+          schema:
+            $ref: '#/definitions/resp.successResp'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/resp.errorResp'
+        "404":
+          description: Resource Not Found
+          schema:
+            $ref: '#/definitions/resp.errorResp'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/resp.errorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/resp.errorResp'
+      summary: create account
+      tags:
+      - Account
+
+swagger: "2.0"
