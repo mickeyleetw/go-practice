@@ -1,0 +1,12 @@
+
+version: '3'
+services:
+  senao-db:
+    image: 'postgres:13-alpine'
+    restart: always
+    environment:
+      - POSTGRES_DB=senao
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=usr
+    ports:
+      - '5440:5432'

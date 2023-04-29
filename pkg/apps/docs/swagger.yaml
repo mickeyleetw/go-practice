@@ -1,0 +1,79 @@
+definitions:
+  models.CreateAccountReq:
+    properties:
+      password:
+        pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-z0-9]{8,32}$"
+        type: string
+      name:
+        maxLength: 32
+        minLength: 1
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  core.errorResp:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  models.AccountResp:
+    properties:
+      password:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+info:
+  contact: {}
+  title: Senao Pretest API
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: ping
+      tags:
+      - Other
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateAccountReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.AccountResp'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/core.errorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.errorResp'
+      summary: create account
+      tags:
+      - Account
+swagger: "2.0"
