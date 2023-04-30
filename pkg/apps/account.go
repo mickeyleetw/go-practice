@@ -1,10 +1,15 @@
 package apps
 
 import (
+	"fmt"
 	"net/http"
 	errors "senao/pkg/core"
+
+	// "senao/pkg/models"
+
+	// "senao/pkg/models"
+
 	"senao/pkg/domain"
-	"senao/pkg/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,10 +22,44 @@ func NewAccountHandler(AccountUsecase domain.AccountUsecase) *accountHandler {
 	return &accountHandler{accountUsecase: AccountUsecase}
 }
 
+type CreateAccountReq struct {
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
+
+// type CreateAccountReqDTO struct {
+// 	Name     string `validate:"required,lte=32,gte=3"`
+// 	Password string `validate:"required,lte=32,gte=8,contains=1Upper,contains=1Lower,contains=1Digit"`
+// }
+
+type AccountResp struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
+
+func CreateAccountReq2DTO(req *CreateAccountReq) *domain.CreateAccountReqDTO {
+	createAccountReqDTO := &domain.CreateAccountReqDTO{
+		Name:     req.Name,
+		Password: req.Password,
+	}
+	return createAccountReqDTO
+}
+
+func AccountDomain2Resp(account *domain.Account) *AccountResp {
+	accountResp := &AccountResp{
+		ID:       account.ID,
+		Name:     account.Name,
+		Password: account.Password,
+	}
+	return accountResp
+}
+
 func (o *accountHandler) CreateAccount(c *gin.Context) {
 
 	// bind req
-	req := &models.CreateAccountReq{}
+	fmt.Print(c.Request.Body)
+	req := &CreateAccountReq{}
 
 	if err := c.ShouldBindJSON(req); err != nil {
 		err2 := errors.NewValidationError(err.Error())
@@ -29,7 +68,7 @@ func (o *accountHandler) CreateAccount(c *gin.Context) {
 	}
 
 	// to req dto and create
-	createAccountReqDTO := domain.CreateAccountReq2DTO(req)
+	createAccountReqDTO := CreateAccountReq2DTO(req)
 	account, err := o.accountUsecase.CreateAccount(c, createAccountReqDTO)
 	if err != nil {
 		errors.WriteErrorResp(c, err)
@@ -37,6 +76,6 @@ func (o *accountHandler) CreateAccount(c *gin.Context) {
 	}
 
 	// to resp dto
-	resp := domain.AccountDomain2Resp(account)
+	resp := AccountDomain2Resp(account)
 	c.JSON(http.StatusCreated, resp)
 }

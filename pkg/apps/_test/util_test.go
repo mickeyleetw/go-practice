@@ -17,7 +17,7 @@ func setup() {
 	accountHandler := apps.NewAccountHandler(accountUsecase)
 	r = gin.Default()
 
-	r.POST("/account", accountHandler.CreateAccount)
+	r.POST("/accounts", accountHandler.CreateAccount)
 }
 
 func shutdown() {

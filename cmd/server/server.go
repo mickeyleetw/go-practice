@@ -75,7 +75,7 @@ func start() {
 		apiGroup.GET("/ping", commonHandler.Ping)
 		apiGroup.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-		apiGroup.POST("/account", accountHandler.CreateAccount)
+		apiGroup.POST("/accounts", accountHandler.CreateAccount)
 	}
 	r.Run(fmt.Sprintf(":%d", PORT))
 }

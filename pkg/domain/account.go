@@ -2,7 +2,6 @@ package domain
 
 import (
 	"context"
-	"senao/pkg/models"
 	"time"
 
 	"github.com/uptrace/bun"
@@ -21,22 +20,22 @@ type CreateAccountReqDTO struct {
 	Password string `validate:"required,lte=32,gte=8,contains=1Upper,contains=1Lower,contains=1Digit"`
 }
 
-func CreateAccountReq2DTO(req *models.CreateAccountReq) *CreateAccountReqDTO {
-	createAccountReqDTO := &CreateAccountReqDTO{
-		Name:     req.Name,
-		Password: req.Password,
-	}
-	return createAccountReqDTO
-}
+// func CreateAccountReq2DTO(req *apps.CreateAccountReq) *CreateAccountReqDTO {
+// 	createAccountReqDTO := &CreateAccountReqDTO{
+// 		Name:     req.Name,
+// 		Password: req.Password,
+// 	}
+// 	return createAccountReqDTO
+// }
 
-func AccountDomain2Resp(account *Account) *models.AccountResp {
-	accountResp := &models.AccountResp{
-		ID:       account.ID,
-		Name:     account.Name,
-		Password: account.Password,
-	}
-	return accountResp
-}
+// func AccountDomain2Resp(account *Account) *models.AccountResp {
+// 	accountResp := &models.AccountResp{
+// 		ID:       account.ID,
+// 		Name:     account.Name,
+// 		Password: account.Password,
+// 	}
+// 	return accountResp
+// }
 
 type AccountUsecase interface {
 	CreateAccount(ctx context.Context, CreateAccountReqDTO *CreateAccountReqDTO) (*Account, error)
