@@ -1,4 +1,3 @@
-# SENAO PRETEST
 
 ## Prepare Dev Environment
 * install golang 1.20
